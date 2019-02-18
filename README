@@ -1,0 +1,37 @@
+For beta-scope analysis(run on lab computer):
+
+1. Create a directory, e.g "runXXX"
+  mkdir runXXX
+
+2. Create a raw directory in "runXXX":
+  cd runXXX
+  mkdir raw
+
+3. Copy beta-scope raw root files to raw:
+  cp path_to_raw_files/* raw/
+
+4. Generate beta-scope configuration file:
+  /usr/local/Software/HGTD_BetaScope/BetaScopeAnalysis/bin/generateBetaConfig.exe
+
+5. Open "beta_config_v20180810.ini" and change the parameters.
+
+6. Run the analysis and produce parsed files:
+  /usr/local/Software/HGTD_BetaScope/BetaScopeAnalysis/bin/simpleBetaRun.exe beta_config_v20180810.ini
+
+7. Generate data processing configuration file:
+  /usr/local/Software/HGTD_BetaScope/BetaScopeDataProcessor/bin/GenerateDataProcessorConfig.exe
+
+8. Fill out "run_info_v08022018.ini":
+
+  note: cut_1(2,3,4) takes
+	8 arguments(numbers): dutTmaxMin dutTmaxMax dutPmaxMin dutPmaxMax trigTmaxMin trigTmaxMax trigPmaxMin trigPmaxMax
+	8+1 arguments: first 8 are same as above, the 9th argument takes TCut style string.
+	1 argument: TCut style string.
+
+9. Get routine plots and results:
+  /usr/local/Software/HGTD_BetaScope/BetaScopeDataProcessor/bin/GetResults.exe run_info_v08022018.ini
+
+10. Get CFD Scan:
+  mkdir CFD
+  cd CFD
+  /usr/local/Software/HGTD_BetaScope/BetaScopeDataProcessor/bin/CFDScan.exe ../run_info_v08022018.ini
