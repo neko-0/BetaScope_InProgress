@@ -77,6 +77,15 @@ std::tuple<double,double,double,bool,double,double> getTimeDiffSigma(
     sigmaAfterFitError = gaussFit->GetParError(2);
     minRangeAfterFit = meanAfterFit -5.0*sigmaAfterFit;
     maxRangeAfterFit = meanAfterFit +5.0*sigmaAfterFit;
+
+    //if the fitted sigma and data std have difference of 10 ps,
+    //that means the distribution migght have problem.
+    //Assign the data std intead of fitted one.
+    if( abs(sigmaAfterFit-histogram->GetStdDev(1)) > 10 )
+    {
+      CUSTOM_PRINTF::warning_printf("\n| Fitted sigma - data std| > 10! \n");
+      sigmaAfterFit = histogram->GetStdDev(1);
+    }
   }
 
   if( savePlot )

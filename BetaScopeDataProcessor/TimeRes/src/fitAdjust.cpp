@@ -25,12 +25,14 @@ std::tuple<int,double,double> fitAdjust(
   int numBinAfterAdjust=numBin;
   double meanAfterAdjust;
   double sigmaAfterAdjust;
+  double dataSTD;
 
   TH1D *histogram = new TH1D;
   histogram = make_CFDTdiff_hitogram(itree, icut, workerID, dutChannel, trigChannel, CFDpercentage, numBin, minRange, maxRange);
   //std::cout << "binSS  " << numBin << std::endl;
   meanAfterAdjust = histogram->GetXaxis()->GetBinCenter(histogram->GetMaximumBin());
   sigmaAfterAdjust = histogram->GetStdDev(1);
+  dataSTD = histogram->GetStdDev(1);
   std::tuple<double,double,double,bool,double,double> fitResult = getTimeDiffSigma(workerID, histogram, CFDpercentage, meanAfterAdjust, sigmaAfterAdjust);
   meanAfterAdjust = std::get<0>(fitResult);
   sigmaAfterAdjust = std::get<1>(fitResult);
