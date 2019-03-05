@@ -82,8 +82,15 @@ void betaAnalysis::SetBranch()
 		}
 		//===========================
 
-		this->voltageReader[b] = new TTreeReaderArray<double>( *this->treeReader, Form("w%d", this->channel.at(b)) );
-		this->timeReader[b] = new TTreeReaderArray<double>( *this->treeReader, Form("t%d", this->channel.at(b)) );
+		auto check_volName = ((TTree *) this->iFile->Get(iTreeName.c_str()))->GetListOfBranches()->FindObject(Form("wC%", this->channel.at(b)) );
+		if(check_volName!=NULL){
+			this->voltageReader[b] = new TTreeReaderArray<double>( *this->treeReader, Form("wC%d", this->channel.at(b)) );
+			this->timeReader[b] = new TTreeReaderArray<double>( *this->treeReader, Form("tC%d", this->channel.at(b)) );
+		}
+		else{
+			this->voltageReader[b] = new TTreeReaderArray<double>( *this->treeReader, Form("w%d", this->channel.at(b)) );
+			this->timeReader[b] = new TTreeReaderArray<double>( *this->treeReader, Form("t%d", this->channel.at(b)) );
+		}
 	}
 
 	//===for saving scope timestamp===
@@ -123,8 +130,18 @@ void betaAnalysis::SetBranch()
 
 	if( this->ssrl_AC_position )
 	{
-		this->SSRL_XposReader = new TTreeReaderArray<double>( *this->treeReader, "pos_x" );
-		this->SSRL_YposReader = new TTreeReaderArray<double>( *this->treeReader, "pos_y" );
+		auto check_ypos = ((TTree *) this->iFile->Get(iTreeName.c_str()))->GetListOfBranches()->FindObject("y");
+		auto check_zpos = ((TTree *) this->iFile->Get(iTreeName.c_str()))->GetListOfBranches()->FindObject("z");
+		if( check_ypos != NULL && check_zpos != NULL )
+		{
+			this->SSRL_XposReader = new TTreeReaderArray<double>( *this->treeReader, "z" );
+			this->SSRL_YposReader = new TTreeReaderArray<double>( *this->treeReader, "y" );
+		}
+		else
+		{
+			this->SSRL_XposReader = new TTreeReaderArray<double>( *this->treeReader, "xpos" );
+			this->SSRL_YposReader = new TTreeReaderArray<double>( *this->treeReader, "ypos" );
+		}
 		this->oTree->Branch( "ssrl_pos_x", "vector<double>", &this->ssrl_pos_x );
 		this->oTree->Branch( "ssrl_pos_y", "vector<double>", &this->ssrl_pos_y );
 	}
