@@ -5,8 +5,8 @@
 
 void betaAnalysis::SaveFile()
 {
-	TThread::Lock();
+	//TThread::Lock();
 	this->oFile->Write();
 	this->oFile->Close();
-	TThread::UnLock();
+	//TThread::UnLock();
 }

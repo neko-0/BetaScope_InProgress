@@ -82,7 +82,7 @@ void betaAnalysis::SetBranch()
 		}
 		//===========================
 
-		auto check_volName = ((TTree *) this->iFile->Get(iTreeName.c_str()))->GetListOfBranches()->FindObject(Form("wC%", this->channel.at(b)) );
+		auto check_volName = ((TTree *) this->iFile->Get(iTreeName.c_str()))->GetListOfBranches()->FindObject(Form("wC%d", this->channel.at(b)) );
 		if(check_volName!=NULL){
 			this->voltageReader[b] = new TTreeReaderArray<double>( *this->treeReader, Form("wC%d", this->channel.at(b)) );
 			this->timeReader[b] = new TTreeReaderArray<double>( *this->treeReader, Form("tC%d", this->channel.at(b)) );

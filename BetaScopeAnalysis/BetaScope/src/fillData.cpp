@@ -71,6 +71,7 @@ void betaAnalysis::FillData()
   {
     //==========================================================================
     // Checking the status of the waveform and time vector size
+    bool checkNextEvent = true;
     for( std::size_t b = 0, max_b = this->channel.size(); b < max_b; b++ )
     {
       if( this->skipBadVector )
@@ -85,22 +86,22 @@ void betaAnalysis::FillData()
 
       if( (this->timeReader[b]->GetSize() == 0) || (this->voltageReader[b]->GetSize() == 0) || (this->voltageReader[b]->GetSize() != this->timeReader[b]->GetSize()) )
       {
-        while( this->voltageReader[b]->GetSize() == 0 )
+        while( this->voltageReader[b]->GetSize() == 0 && checkNextEvent )
         {
           std::cout << "Voltage Reader is empty at event " << fill << ", skipping whole event..." << std::endl;
-          this->treeReader->Next();
+          checkNextEvent = this->treeReader->Next();
           fill++;
         }
-        while( this->timeReader[b]->GetSize() == 0 )
+        while( this->timeReader[b]->GetSize() == 0 && checkNextEvent )
         {
           std::cout << "Time Reader is empty at event " << fill << ", skipping whole event..." << std::endl;
-          this->treeReader->Next();
+          checkNextEvent = this->treeReader->Next();
           fill++;
         }
-        while( (this->voltageReader[b]->GetSize() != this->timeReader[b]->GetSize()) )
+        while( ( (this->voltageReader[b]->GetSize() != this->timeReader[b]->GetSize()) ) && checkNextEvent )
         {
           std::cout << "Voltage Reader and Time Reader have different array size at event " << fill << ", skipping whole event..." << std::endl;
-          this->treeReader->Next();
+          checkNextEvent = this->treeReader->Next();
           fill++;
         }
       }
@@ -161,7 +162,7 @@ void betaAnalysis::FillData()
       double RMS =0.0;
       if( this->ssrl_switch && !this->ssrl_dynamic_noise && !this->ssrl_bruteForceBaseline )
       {
-        if( channel.at(b) != 3 ) SSRL_Baseline( this->w[b] );
+        if( channel.at(b) != 3 ) SSRL_Baseline( this->w[b], this->ofileName );
       }
       else if( this->ssrl_dynamic_noise )
       {
@@ -467,10 +468,10 @@ void betaAnalysis::FillData()
 
     //======================================================================================
 
-    TThread::Lock();
+    //TThread::Lock();
     this->oTree->Fill();
     betaAnalysis::ClearBuffer();
-    TThread::UnLock();
+    //TThread::UnLock();
 
     if ( fill % 300 == 0)
     {

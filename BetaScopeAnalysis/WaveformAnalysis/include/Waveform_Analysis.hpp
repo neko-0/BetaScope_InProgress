@@ -9,7 +9,7 @@
 void Correct_Baseline( std::vector<double> &voltageVec, int ptN );
 void Correct_Baseline2( std::vector<double> &voltageVec, double fractional_pts );
 void Correct_Baseline3( std::vector<double> &voltageVec, std::vector<double> timeVec, double tRange[2] ); //special treatment of ill-signal baseline.
-void SSRL_Baseline( std::vector<double> &w );
+void SSRL_Baseline( std::vector<double> &w, std::string workerID );
 void SSRL_Baseline( std::vector<double> &w, double &RMS);
 void SSRL_Dynamic_Noise_And_Baseline(
   std::vector<double> &w, //voltage

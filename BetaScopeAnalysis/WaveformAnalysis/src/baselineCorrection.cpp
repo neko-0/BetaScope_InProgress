@@ -111,21 +111,24 @@ void Correct_Baseline3(
 //==============================================================================
 //find the baseline correction for SSRL data.
 
-void SSRL_Baseline( std::vector<double> &w )
+void SSRL_Baseline( std::vector<double> &w, std::string workerID )
 {
-  TThread::Lock();
-  delete gROOT->FindObject("voltage_histogram");
-  TH1D *voltage_histogram = new TH1D( "voltage_histogram", "", 100, 1, 1);
+  //TThread::Lock();
+  std::string histoName = workerID+"voltage_histogram";
+  std::string fitName = workerID+"gausFit";
+  delete gROOT->FindObject(histoName.c_str());
+  TH1D *voltage_histogram = new TH1D( histoName.c_str(), "", 100, 1, 1);
   for( std::size_t i = 0, max = w.size(); i < max; i++ )
   {
     voltage_histogram->Fill( w.at(i) );
   }
-  TF1 *gausFit = new TF1( "gausFit", "gaus" );
+  TThread::Lock();
+  TF1 *gausFit = new TF1( fitName.c_str(), "gaus" );
   gausFit->SetParameter( 1, voltage_histogram->GetBinCenter(voltage_histogram->GetMaximumBin() ) );
-  voltage_histogram->Fit( "gausFit", "Q0" );
+  voltage_histogram->Fit( gausFit, "Q0" );
   double base_line_correction = gausFit->GetParameter( 1 );
   delete voltage_histogram;
-  TThread::UnLock();
+  //TThread::UnLock();
   for( std::size_t j = 0, max = w.size(); j < max; j++){ w.at(j) = w.at(j)- base_line_correction; }
 }
 
