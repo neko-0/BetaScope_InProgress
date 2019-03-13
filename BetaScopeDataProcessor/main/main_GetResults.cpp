@@ -60,6 +60,7 @@ void GetResults(std::string run_ini, std::string output_folder = "Results", bool
 	std::string mv_results_xlsx = "mv *_results.xlsx " + output_folder;
 	system( "python  ~/Codes/py_pyExcel/parseBetaResultsToExcel.py");
 	system( "python  $BETASCOPE_PAHT/parseBetaResultsToExcel.py");
+	system( "python  /usr/local/Software/parseBetaResultsToExcel.py");
 	system( mv_png.c_str() );
 	system( mv_results_txt.c_str() );
 	system( mv_results_ini.c_str() );

@@ -15,7 +15,7 @@ ROOT_LINKS   = `root-config --cflags --glibs`
 ROOFIT       = -lRooFit -lHtml -lMinuit -lRooFitCore -lRooStats
 ROOT_LIBS    = -L${ROOTSYS}/lib -lTreePlayer -lCore
 ROOT_INCLUDE = -I${ROOTSYS}/include
-BOOST_LIB    = -L/usr/include/boost/property_tree
+BOOST_LIB    = -L/usr/include/boost/property_tree -L/usr/include/boost/ -lboost_thread -lboost_system
 
 ################################################################################
 # top level folder path
@@ -110,7 +110,8 @@ $(TIME_RES_BUILD_DIR)/%.o: $(TIME_RES_SRC_DIR)/%.cpp
 
 all:$(BIN_DIR)/GetResults.exe \
 		$(BIN_DIR)/GenerateDataProcessorConfig.exe \
-		$(BIN_DIR)/CFDScan.exe
+		$(BIN_DIR)/CFDScan.exe \
+		$(BIN_DIR)/dataExtractor.exe
 
 
 $(BIN_DIR)/GetResults.exe: $(MAIN_DIR)/main_GetResults.cpp $(HISTOGRAM_PROCESSOR_BUILD_FILES) $(DATA_SELECTION_BUILD_FILES) $(DATA_PROCESSING_CONFIG_BUILD_FILES) $(DATA_OUTPUT_FORMAT_BUILD_FILES)
@@ -121,6 +122,9 @@ $(BIN_DIR)/GenerateDataProcessorConfig.exe: $(MAIN_DIR)/main_measurement_info.cp
 
 $(BIN_DIR)/CFDScan.exe: $(MAIN_DIR)/main_CFDScan.cpp $(TIME_RES_BUILD_FILES) $(DATA_PROCESSING_CONFIG_BUILD_FILES) $(DATA_SELECTION_BUILD_FILES)
 	$(CC) $(DEBUG) $(LFLAGS) $^ -o $@ $(ROOT_LINKS) $(ROOT_LIBS) $(ROOFIT)
+
+$(BIN_DIR)/dataExtractor.exe: $(MAIN_DIR)/main_dataExtractor.cpp $(TIME_RES_BUILD_FILES) $(DATA_PROCESSING_CONFIG_BUILD_FILES) $(DATA_SELECTION_BUILD_FILES)
+	$(CC) $(DEBUG) $(LFLAGS) $^ -o $@ $(ROOT_LINKS) $(ROOT_LIBS) $(ROOFIT) $(BOOST_LIB)
 
 .PHONY: clean
 clean:
