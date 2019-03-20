@@ -40,7 +40,7 @@ int slot_num( double tmax )
 }
 
 
-void betaAnalysis::FillData()
+int betaAnalysis::FillData()
 {
   bool limiting_search_region_OnOff = betaAnalysis::get_restricSignalMaxSearchRange_status();
 
@@ -84,25 +84,35 @@ void betaAnalysis::FillData()
         }
       }
 
-      if( (this->timeReader[b]->GetSize() == 0) || (this->voltageReader[b]->GetSize() == 0) || (this->voltageReader[b]->GetSize() != this->timeReader[b]->GetSize()) )
+      if( (this->voltageReader[b]->GetSize() < 1000) || (this->timeReader[b]->GetSize() == 0) || (this->voltageReader[b]->GetSize() == 0) || (this->voltageReader[b]->GetSize() != this->timeReader[b]->GetSize()) )
       {
-        while( this->voltageReader[b]->GetSize() == 0 && checkNextEvent )
+        while( this->voltageReader[b]->GetSize() == 0 )
         {
           std::cout << "Voltage Reader is empty at event " << fill << ", skipping whole event..." << std::endl;
           checkNextEvent = this->treeReader->Next();
           fill++;
+          if(!checkNextEvent)return 1;
         }
-        while( this->timeReader[b]->GetSize() == 0 && checkNextEvent )
+        while( this->timeReader[b]->GetSize() == 0 )
         {
           std::cout << "Time Reader is empty at event " << fill << ", skipping whole event..." << std::endl;
           checkNextEvent = this->treeReader->Next();
           fill++;
+          if(!checkNextEvent)return 1;
         }
-        while( ( (this->voltageReader[b]->GetSize() != this->timeReader[b]->GetSize()) ) && checkNextEvent )
+        while( ( (this->voltageReader[b]->GetSize() != this->timeReader[b]->GetSize()) ) )
         {
           std::cout << "Voltage Reader and Time Reader have different array size at event " << fill << ", skipping whole event..." << std::endl;
           checkNextEvent = this->treeReader->Next();
           fill++;
+          if(!checkNextEvent)return 1;
+        }
+        while( this->voltageReader[b]->GetSize() < 1000 )
+        {
+          std::cout << "Voltage Reader less than 1000 at event " << fill << ", skipping whole event..." << std::endl;
+          checkNextEvent = this->treeReader->Next();
+          fill++;
+          if(!checkNextEvent)return 1;
         }
       }
     }
@@ -505,4 +515,5 @@ void betaAnalysis::FillData()
 
     fill ++;
   }
+  return 0;
 }

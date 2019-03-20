@@ -191,7 +191,7 @@ class betaAnalysis
     virtual void AllocateMemory();
     virtual void SetBranch();
     virtual void ClearBuffer();
-    virtual void FillData();
+    virtual int FillData();
     virtual void SaveFile();
 
 
