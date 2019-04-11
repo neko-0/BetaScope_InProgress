@@ -132,8 +132,8 @@ int betaAnalysis::FillData()
 
       if( this->ssrl_switch )
       {
-        //const double dT =  this->timeReader[b]->At(1) - this->timeReader[b]->At(0);
-        const double dT =  50.0;//pico-second increment
+        const double dT =  this->timeReader[b]->At(1) - this->timeReader[b]->At(0);
+        //const double dT =  50.0;//pico-second increment
 
         for(unsigned int i = 0; i < this->npoint; i++)
         {
@@ -485,7 +485,7 @@ int betaAnalysis::FillData()
 
     if ( fill % 300 == 0)
     {
-      TThread::Lock();
+      //TThread::Lock();
       /*
       time_t now = time(0);
       tm *ltm = localtime(&now);
@@ -510,7 +510,7 @@ int betaAnalysis::FillData()
       {
         std::cout << "["<< date << "]" << " Finished = " << fill << std::endl;
       }
-      TThread::UnLock();
+      //TThread::UnLock();
     }
 
     fill ++;

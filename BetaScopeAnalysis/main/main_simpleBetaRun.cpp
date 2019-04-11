@@ -192,6 +192,7 @@ void SimpleBetaRun( const char* beta_ini )
 					singleRun.set_parallelStatus( true );
 					parallel_file_loader.push_back( singleRun );
 				}
+				else std::cout << "skipp invalid root file " << file_name << std::endl;
 			}
 			else
 			{

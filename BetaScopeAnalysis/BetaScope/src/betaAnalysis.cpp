@@ -101,25 +101,25 @@ betaAnalysis::betaAnalysis(const char* ipath, const char* custom)
 		TThread::Lock();
 		std::cout << this->path << " is good" << std::endl;
 		TThread::UnLock();
+
+		std::string delimiter = "/";
+		std::string opath = ipath;
+		while( int(opath.find( delimiter )) != -1 )
+		{
+			opath.erase(0, opath.find( delimiter ) + delimiter.length() );
+		}
+		this->ofileName = this->filePrefix += opath;
+		this->ifileName = ipath;
+
+		//this->iTree = (TTree*) this->iFile->Get( this->iTreeName.c_str() );
+		this->treeReader = new TTreeReader( this->iTreeName.c_str(), this->iFile );
+
+		this->oFile = new TFile( this->ofileName.c_str(), "RECREATE", "", this->compressionLevel );
+		this->oTree = new TTree( "wfm", "waveform analysis" );
+		this->oTree->SetDirectory( this->oFile );
+
+		this->numEvent = this->treeReader->GetEntries(true);
 	}
-
-	std::string delimiter = "/";
-	std::string opath = ipath;
-	while( int(opath.find( delimiter )) != -1 )
-	{
-		opath.erase(0, opath.find( delimiter ) + delimiter.length() );
-	}
-	this->ofileName = this->filePrefix += opath;
-	this->ifileName = ipath;
-
-	//this->iTree = (TTree*) this->iFile->Get( this->iTreeName.c_str() );
-	this->treeReader = new TTreeReader( this->iTreeName.c_str(), this->iFile );
-
-	this->oFile = new TFile( this->ofileName.c_str(), "RECREATE", "", this->compressionLevel );
-	this->oTree = new TTree( "wfm", "waveform analysis" );
-	this->oTree->SetDirectory( this->oFile );
-
-	this->numEvent = this->treeReader->GetEntries(true);
 }
 
 void betaAnalysis::AllocateMemory()
