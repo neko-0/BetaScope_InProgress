@@ -71,6 +71,15 @@ TIME_RES_BUILD_DIR = ./TimeRes/build
 TIME_RES_SRC_FILES = $(wildcard $(TIME_RES_SRC_DIR)/*.cpp)
 TIME_RES_BUILD_FILES = $(patsubst $(TIME_RES_SRC_DIR)/%.cpp, $(TIME_RES_BUILD_DIR)/%.o, $(TIME_RES_SRC_FILES))
 
+################################################################################
+# Avearge waveform
+################################################################################
+AVERAGE_WAVE_INCLUDE_DIR = ./averageWave/include
+AVERAGE_WAVE_SRC_DIR = ./averageWave/src
+AVERAGE_WAVE_BUILD_DIR = ./averageWave/build
+AVERAGE_WAVE_SRC_FILES = $(wildcard $(AVERAGE_WAVE_SRC_DIR)/*.cpp)
+AVERAGE_WAVE_BUILD_FILES = $(patsubst $(AVERAGE_WAVE_SRC_DIR)/%.cpp, $(AVERAGE_WAVE_BUILD_DIR)/%.o, $(AVERAGE_WAVE_SRC_FILES))
+
 
 #*******************************************************************************
 # Build Waveform Analsyis object files.
@@ -103,6 +112,12 @@ $(HISTOGRAM_PROCESSOR_BUILD_DIR)/%.o: $(HISTOGRAM_PROCESSOR_SRC_DIR)/%.cpp
 $(TIME_RES_BUILD_DIR)/%.o: $(TIME_RES_SRC_DIR)/%.cpp
 	$(CC) $(DEBUG) -c $^ -o $@ $(ROOT_LINKS) $(ROOT_LIBS) $(ROOT_INCLUDE) $(ROOFIT)
 
+#*******************************************************************************
+# Build Average_Wave object files.
+#*******************************************************************************
+$(AVERAGE_WAVE_BUILD_DIR)/%.o: $(AVERAGE_WAVE_SRC_DIR)/%.cpp
+	$(CC) $(DEBUG) -c $^ -o $@ $(ROOT_LINKS) $(ROOT_LIBS) $(ROOT_INCLUDE) $(ROOFIT)
+
 
 
 #===============================================================================
@@ -111,7 +126,8 @@ $(TIME_RES_BUILD_DIR)/%.o: $(TIME_RES_SRC_DIR)/%.cpp
 all:$(BIN_DIR)/GetResults.exe \
 		$(BIN_DIR)/GenerateDataProcessorConfig.exe \
 		$(BIN_DIR)/CFDScan.exe \
-		$(BIN_DIR)/dataExtractor.exe
+		$(BIN_DIR)/dataExtractor.exe \
+		$(BIN_DIR)/GetAverageWave.exe
 
 
 $(BIN_DIR)/GetResults.exe: $(MAIN_DIR)/main_GetResults.cpp $(HISTOGRAM_PROCESSOR_BUILD_FILES) $(DATA_SELECTION_BUILD_FILES) $(DATA_PROCESSING_CONFIG_BUILD_FILES) $(DATA_OUTPUT_FORMAT_BUILD_FILES)
@@ -124,6 +140,9 @@ $(BIN_DIR)/CFDScan.exe: $(MAIN_DIR)/main_CFDScan.cpp $(TIME_RES_BUILD_FILES) $(D
 	$(CC) $(DEBUG) $(LFLAGS) $^ -o $@ $(ROOT_LINKS) $(ROOT_LIBS) $(ROOFIT)
 
 $(BIN_DIR)/dataExtractor.exe: $(MAIN_DIR)/main_dataExtractor.cpp $(TIME_RES_BUILD_FILES) $(DATA_PROCESSING_CONFIG_BUILD_FILES) $(DATA_SELECTION_BUILD_FILES)
+	$(CC) $(DEBUG) $(LFLAGS) $^ -o $@ $(ROOT_LINKS) $(ROOT_LIBS) $(ROOFIT) $(BOOST_LIB)
+
+$(BIN_DIR)/GetAverageWave.exe: $(MAIN_DIR)/main_GetAverageWave.cpp $(AVERAGE_WAVE_BUILD_FILES) $(DATA_PROCESSING_CONFIG_BUILD_FILES)
 	$(CC) $(DEBUG) $(LFLAGS) $^ -o $@ $(ROOT_LINKS) $(ROOT_LIBS) $(ROOFIT) $(BOOST_LIB)
 
 .PHONY: clean
