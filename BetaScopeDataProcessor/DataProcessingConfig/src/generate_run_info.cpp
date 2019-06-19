@@ -41,6 +41,7 @@ void GenerateRunInfo()
 
   run_info << std::endl;
 
+  //writing parameters for each run.
   for( unsigned int i = 0; i < file_name.size(); i++ )
   {
     run_info << "[" << "run" << i << "]" << std::endl;
@@ -51,6 +52,8 @@ void GenerateRunInfo()
     run_info << "cut_3= " << std::endl;
     run_info << "cut_4= " << std::endl;
     run_info << "CFD=20" << std::endl;
+    run_info << "temperature=" <<std::endl;
+    run_info << "trigger_bias=" <<std::endl;
     run_info << std::endl;
   }
 

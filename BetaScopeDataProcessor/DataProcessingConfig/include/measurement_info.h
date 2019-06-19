@@ -27,6 +27,8 @@ struct MeasurementInfo
   std::vector<std::string> file_name[1024];
   std::vector<std::string> cut[4][1024];
   std::vector<double> CFD[1024];
+  std::vector<int> trigger_bias[1024];
+  std::vector<int> run_temperature[1024];
 
   MeasurementInfo( std::string ifile );
   void PrintContent();

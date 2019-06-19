@@ -16,6 +16,8 @@ std::vector<Average_Wave> prepare_averageWave_workers( std::string measurement_i
   {
     std::cout <<  measurement_info.file_name[i].at(0) << " \n";
     Average_Wave outArg( measurement_info.file_name[i].at(0) );
+    outArg.set_dut_ch( measurement_info.dut_channel);
+    outArg.set_trig_ch( measurement_info.trigger_channel);
     output.push_back( outArg);
   }
   return output;

@@ -3,7 +3,9 @@
 
 void DataOutputFormat::CreateBetaScopeOutputFile(
   std::string biasVoltage,
-  std::map<std::string,std::pair<double,double>> outData[] )
+  std::map<std::string,std::pair<double,double>> outData[],
+  int temperature,
+  int trigger_bias )
 {
 
   std::string dutHeader = "DUT_"+biasVoltage;
@@ -33,6 +35,8 @@ void DataOutputFormat::CreateBetaScopeOutputFile(
   DataOutputFormat::WriteKey( "NewPulseArea", outData[0]["PulseArea with 1ns before zero crossing of interpolated rising edge to 3ns after Tmax"].first );
   DataOutputFormat::WriteKey( "NewPulseArea_Error", outData[0]["PulseArea with 1ns before zero crossing of interpolated rising edge to 3ns after Tmax"].second );
 
+  DataOutputFormat::WriteKey( "temperature", temperature);
+  DataOutputFormat::WriteKey( "trigger_bias", trigger_bias);
 
   std::string triggerHeader = "Trig_"+biasVoltage;
   DataOutputFormat::WriteHeader( triggerHeader );
@@ -60,4 +64,7 @@ void DataOutputFormat::CreateBetaScopeOutputFile(
 
   DataOutputFormat::WriteKey( "NewPulseArea", outData[1]["PulseArea with 1ns before zero crossing of interpolated rising edge to 3ns after Tmax"].first );
   DataOutputFormat::WriteKey( "NewPulseArea_Error", outData[1]["PulseArea with 1ns before zero crossing of interpolated rising edge to 3ns after Tmax"].second );
+
+  DataOutputFormat::WriteKey( "temperature", temperature);
+  DataOutputFormat::WriteKey( "trigger_bias", trigger_bias);
 }

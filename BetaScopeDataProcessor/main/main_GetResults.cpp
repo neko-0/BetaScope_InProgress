@@ -37,7 +37,7 @@ void GetResults(std::string run_ini, std::string output_folder = "Results", bool
 		TEMP.ProcessHistogram( measurement_info.file_name[i].at(0).c_str(), measurement_info.bias[i].at(0).c_str(), selection->cuts, true, selection->sideband1, selection->sideband2 );
 
     DataOutputFormat outfile;
-    outfile.CreateBetaScopeOutputFile( measurement_info.bias[i].at(0).c_str(), TEMP.oData );
+    outfile.CreateBetaScopeOutputFile( measurement_info.bias[i].at(0).c_str(), TEMP.oData, measurement_info.run_temperature[i].at(0), measurement_info.trigger_bias[i].at(0) );
 
 		std::cout << "finished " << measurement_info.file_name[i].at(0)  << std::endl;
 		cut_v.clear();

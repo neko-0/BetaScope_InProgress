@@ -29,7 +29,9 @@ class DataOutputFormat{
 
     void CreateBetaScopeOutputFile(
       std::string biasVoltage,
-      std::map<std::string,std::pair<double,double>> outData[]
+      std::map<std::string,std::pair<double,double>> outData[],
+      int temperatur = 20,
+      int trigger_bias = 390
     );
 
 };

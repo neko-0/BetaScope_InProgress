@@ -39,6 +39,8 @@ MeasurementInfo::MeasurementInfo( std::string ifile )
     std::string cut_3 = run_section + "cut_3";
     std::string cut_4 = run_section + "cut_4";
     std::string CFD = run_section + "CFD";
+    std::string run_temperature = run_section + "temperature";
+    std::string trigger_bias = run_section + "trigger_bias";
 
     this->bias[i].push_back( pt.get<std::string>(bias) );
     if(this->use_selected_events){
@@ -52,6 +54,8 @@ MeasurementInfo::MeasurementInfo( std::string ifile )
     this->cut[2][i].push_back( pt.get<std::string>(cut_3) );
     this->cut[3][i].push_back( pt.get<std::string>(cut_4) );
     this->CFD[i].push_back( pt.get<double>(CFD, 20.0) );
+    this->run_temperature[i].push_back( pt.get<int>(run_temperature) );
+    this->trigger_bias[i].push_back( pt.get<int>(trigger_bias) );
   }
 }
 
